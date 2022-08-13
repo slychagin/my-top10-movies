@@ -2,8 +2,8 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, FloatField
+from wtforms.validators import DataRequired, NumberRange
 import requests
 
 # The movie data base API (https://www.themoviedb.org/)
@@ -39,7 +39,9 @@ db.create_all()
 
 
 class RateMovieForm(FlaskForm):
-    movie_rating = StringField("Your Rating Out of 10 e.g. 7.5", validators=[DataRequired()])
+    movie_rating = FloatField("Your Rating Out of 10 e.g. 7.5",
+                              validators=[DataRequired(message="Enter a number from 1 to 10"),
+                                          NumberRange(min=1, max=10, message="Enter a number from 1 to 10")])
     movie_review = StringField("Your review", validators=[DataRequired()])
     submit = SubmitField("Done")
 
